@@ -5,11 +5,11 @@ const errorHandler = (req: Request, res: Response, next: NextFunction) => {
 	if (result.isEmpty()) {
 		next();
 	} else {
-		res.status(400).send({ errors: result.array() });
+		res.status(400).send({ errors: result.array({ onlyFirstError: true }) });
 	}
 };
 
-export const validateRegistrationForm = [
+export const validateUserForm = [
 	body('username').notEmpty(),
 	body('password').notEmpty(),
 	errorHandler

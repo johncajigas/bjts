@@ -1,7 +1,7 @@
 import { describe, expect, test, it, vi } from "vitest";
 import request from "supertest";
+import { db } from "../src/db/pg";
 import { app } from "../src/index";
-import { pool } from '../src/db/pg';
 describe("App setup and basic connections", () => {
 	it("Environment variables", async () => {
 		expect(process.env.port).ok
@@ -11,11 +11,9 @@ describe("App setup and basic connections", () => {
 		expect(process.env.DBHOST).ok
 	})
 	it("Database connection", async () => {
-		pool.connect()
-			.then((client) => {
-				expect(client.database).toBe(process.env.DBNAME)
-				client.release();
-			});
+		db.connect().then((client) => {
+			expect(client.client.readyForQuery).toBe(true)
+		})
 	})
 	it("Node server and database", async () => {
 		const res = await request(app).get("/user/me").send();

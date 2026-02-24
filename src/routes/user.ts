@@ -1,7 +1,7 @@
 import express, { type Request, type Response } from 'express'
 import { userData } from '../middleware/user';
-import { register } from '../controllers/auth';
-import { validateRegistrationForm } from '../middleware/validators';
+import { register, login } from '../controllers/auth';
+import { validateUserForm } from '../middleware/validators';
 
 const router = express.Router();
 router.get("/me", userData, (req: Request, res: Response) => {
@@ -11,7 +11,12 @@ router.get("/me", userData, (req: Request, res: Response) => {
 });
 router.post("/register",
 	express.json(),
-	validateRegistrationForm,
+	validateUserForm,
 	register
+)
+router.post("/login",
+	express.json(),
+	validateUserForm,
+	login
 )
 export default router;
